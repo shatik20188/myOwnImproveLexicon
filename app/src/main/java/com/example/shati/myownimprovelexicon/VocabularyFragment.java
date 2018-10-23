@@ -2,6 +2,7 @@ package com.example.shati.myownimprovelexicon;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -69,21 +70,26 @@ public class VocabularyFragment extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(Menu.NONE, CM_DELETE_ID, Menu.NONE, "Delete word");
+        menu.add(Menu.NONE, CM_EDIT_ID, Menu.NONE, "Edit word");
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
+        ExpandableListView.ExpandableListContextMenuInfo acmi =
+                (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+        String word = ((TextView)acmi.targetView.findViewById(R.id.itemLV_Word)).getText().toString();
+
         if(item.getItemId() == CM_DELETE_ID) {
 
-            ExpandableListView.ExpandableListContextMenuInfo acmi =
-                    (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
-
-            String word = ((TextView)acmi.targetView.findViewById(R.id.itemLV_Word)).getText().toString();
             dbHelper.delWordByWord(word);
-
             adapterHelper.resetAdapter();
 
         } else if (item.getItemId() == CM_EDIT_ID) {
+
+            Intent intent = new Intent(context, EditWordActivity.class);
+            intent.putExtra("word", word);
+            startActivity(intent);
 
         }
 

@@ -30,4 +30,5 @@
     <string name="themes">Themes</string>
     <string name="title_activity_themes">ThemesActivity</string>
     <string name="add_theme">Add theme</string>
+    <string name="edit">Edit</string>
 </resources>

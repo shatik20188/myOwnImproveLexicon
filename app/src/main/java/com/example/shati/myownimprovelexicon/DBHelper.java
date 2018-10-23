@@ -77,6 +77,12 @@ public class DBHelper {
                 null, null, null);
     }
 
+    public Cursor getWordByWord(String word) {
+        return sqLiteDB.query(WORDS_TABLE_NAME, null,
+                WORDS_COL_WORD + " = \'" + word + "\'", null, null,
+                null, null);
+    }
+
     public void delWordByWord(String word) {
         sqLiteDB.delete(WORDS_TABLE_NAME, WORDS_COL_WORD + " = \'" + word + "\'", null);
     }
@@ -99,6 +105,24 @@ public class DBHelper {
                 null, null);
         cursor.moveToFirst();
         return cursor.getInt(cursor.getColumnIndex(DEGREE_COL_ID));
+    }
+
+    public String getNameById(String TABLE_NAME, long id) {
+
+        String COL_ID, COL_NAME;
+        if (TABLE_NAME.equals(THEMES_TABLE_NAME)) {
+            COL_ID = THEMES_COL_ID;
+            COL_NAME = THEMES_COL_NAME;
+        } else {
+            COL_ID = DEGREE_COL_ID;
+            COL_NAME = DEGREE_COL_NAME;
+        }
+
+        Cursor cursor = sqLiteDB.query(TABLE_NAME, null,
+                COL_ID + " = \'" + id + "\'", null, null,
+                null, null);
+        cursor.moveToFirst();
+        return cursor.getString(cursor.getColumnIndex(COL_NAME));
     }
 
     private class DBCreate extends SQLiteOpenHelper {
