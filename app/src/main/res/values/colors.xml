@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorTranslateWord">#6e6e6e</color>
+
+    <color name="colorWellRem">#7d368b36</color>
+    <color name="colorSosoRem">#7dcebe4a</color>
+    <color name="colorPoorlyRem">#7dd93434</color>
+
+    <color name="colorItem1">#64cacaca</color>
+    <color name="colorItem2">#64b1b1b1</color>
+</resources>

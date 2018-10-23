@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemLV_LinLay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/itemLV_Word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="word"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/itemLV_Translate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="translate"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textColor="@color/colorTranslateWord" />
+
+    <TextView
+        android:id="@+id/itemLV_Theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|end"
+        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:text="theme"
+        android:textAllCaps="false"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textSize="14sp"
+        android:textStyle="italic" />
+
+</LinearLayout>
