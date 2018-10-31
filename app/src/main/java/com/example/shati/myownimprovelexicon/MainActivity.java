@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     FrameLayout mainFrameLayout;
     FragmentTransaction fragTransaction;
     NavigationView navigationView;
+    DialogFragment dialogFilter;
 
     @Override
     protected void onResume() {
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity
         fragTransaction = getSupportFragmentManager().beginTransaction();
         fragTransaction.add(R.id.mainFrameLayout, fragVocabulary);
         fragTransaction.commit();
-
     }
 
     @Override
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, ThemesActivity.class);
             startActivity(intent);
             fragVocabulary.adapterHelper.retAdapter().notifyDataSetChanged();
+        } else if (id == R.id.action_Filter) {
+            dialogFilter = new DialogFilterFragment();
+            dialogFilter.setTargetFragment(fragVocabulary, VocabularyFragment.REQUEST_FILTER);
+            dialogFilter.show(getSupportFragmentManager(), "dialogFragment");
         }
 
         return super.onOptionsItemSelected(item);
@@ -111,6 +116,7 @@ public class MainActivity extends AppCompatActivity
                 fragTransaction = getSupportFragmentManager().beginTransaction();
                 fragTransaction.replace(R.id.mainFrameLayout, fragVocabulary);
                 fragTransaction.commit();
+
             }
         } else if (id == R.id.nav_learn) {
             if ( getSupportFragmentManager().findFragmentById(R.id.mainFrameLayout) != fragLearn ) {
@@ -123,5 +129,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

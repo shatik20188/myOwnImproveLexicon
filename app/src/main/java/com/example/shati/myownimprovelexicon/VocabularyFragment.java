@@ -1,21 +1,19 @@
 package com.example.shati.myownimprovelexicon;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -23,6 +21,9 @@ import android.widget.TextView;
  * A simple {@link Fragment} subclass.
  */
 public class VocabularyFragment extends Fragment {
+
+    public static final int REQUEST_FILTER = 1;
+    public static final int REQUEST_RESET = 2;
 
     private static final int CM_DELETE_ID = 1;
     private static final int CM_EDIT_ID = 2;
@@ -83,7 +84,7 @@ public class VocabularyFragment extends Fragment {
         if(item.getItemId() == CM_DELETE_ID) {
 
             dbHelper.delWordByWord(word);
-            adapterHelper.resetAdapter();
+            adapterHelper.notifyChanged();
 
         } else if (item.getItemId() == CM_EDIT_ID) {
 
@@ -99,6 +100,24 @@ public class VocabularyFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapterHelper.resetAdapter();
+        adapterHelper.notifyChanged();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_FILTER:
+                    String str = data.getStringExtra("theme");
+                    adapterHelper.setFilter(dbHelper.getThemeIdByName(str));
+                    vocListView.setAdapter(adapterHelper.resetAdapter());
+                    break;
+                case REQUEST_RESET:
+                    adapterHelper.resetFilter();
+                    vocListView.setAdapter(adapterHelper.resetAdapter());
+                    break;
+            }
+        }
     }
 }

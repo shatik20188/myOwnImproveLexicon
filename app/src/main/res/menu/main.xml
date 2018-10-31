@@ -4,13 +4,19 @@
     <item
         android:id="@+id/action_AddNewWord"
         android:icon="@android:drawable/ic_input_add"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="@string/add_new_word"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_Themes"
         android:icon="@android:drawable/ic_menu_mapmode"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:title="@string/themes"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_Filter"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:orderInCategory="3"
+        android:title="@string/filter"
         app:showAsAction="never" />
 </menu>

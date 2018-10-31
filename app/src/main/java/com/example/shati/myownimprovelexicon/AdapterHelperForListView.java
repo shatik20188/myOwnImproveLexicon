@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorTreeAdapter;
+
+import java.util.ArrayList;
 
 
 public class AdapterHelperForListView {
@@ -16,10 +20,12 @@ public class AdapterHelperForListView {
     DBHelper dbHelper;
     private AdapterForMainListView adapter;
     private Context ctx;
+    private long filterIdTheme;
 
     public AdapterHelperForListView(Context _ctx) {
         ctx = _ctx;
         dbHelper = new DBHelper(ctx);
+        filterIdTheme = -10;
     }
 
     public AdapterForMainListView getAdapter() {
@@ -40,21 +46,30 @@ public class AdapterHelperForListView {
         adapter = new AdapterForMainListView(ctx, cursor, R.layout.listview_group, groupFrom,
                 groupTo, R.layout.listview_item, childFrom, childTo);
 
-
-
         return adapter;
     }
 
-    public AdapterForMainListView resetAdapter() {
+    public void notifyChanged() {
         adapter.notifyDataSetChanged();
-        //adapter = getAdapter();
-        //adapter.notifyDataSetChanged();
+    }
+
+    public AdapterForMainListView resetAdapter() {
+        adapter = getAdapter();
+        adapter.notifyDataSetChanged();
         return adapter;
     }
 
 
     public AdapterForMainListView retAdapter() {
         return adapter;
+    }
+
+    public void setFilter(long _filterIdTheme) {
+        filterIdTheme = _filterIdTheme;
+    }
+
+    public void resetFilter() {
+        filterIdTheme = -10;
     }
 
     class AdapterForMainListView extends SimpleCursorTreeAdapter {
@@ -67,8 +82,8 @@ public class AdapterHelperForListView {
 
         @Override
         protected Cursor getChildrenCursor(Cursor cursor) {
-            int idCol = cursor.getColumnIndex(DBHelper.DEGREE_COL_ID);
-            return dbHelper.getWordsFromDegree(cursor.getInt(idCol));
+            int idColDegree = cursor.getColumnIndex(DBHelper.DEGREE_COL_ID);
+            return dbHelper.getWordsFromDegree(cursor.getInt(idColDegree), filterIdTheme);
         }
 
         @Override
@@ -113,7 +128,6 @@ public class AdapterHelperForListView {
 
             return super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
         }
-
 
     }
 }

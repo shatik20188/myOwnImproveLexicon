@@ -61,15 +61,22 @@ public class DBHelper {
                 null, null, null);
     }
 
-    public Cursor getWordsFromDegree(long degreeID) {
+    public Cursor getWordsFromDegree(long degreeID, long themeId) {
+
+        String sel;
+        if (themeId == -10) {
+            sel = "";
+        } else {
+            sel = " AND (" + WORDS_COL_ID_THEME + " = " + themeId + ")";
+        }
 
         String table = WORDS_TABLE_NAME + " inner join " + THEMES_TABLE_NAME + " on "
                 + WORDS_TABLE_NAME + "." + WORDS_COL_ID_THEME + " = "
                 + THEMES_TABLE_NAME + "." + THEMES_COL_ID;
 
-        return sqLiteDB.query(table, null,
-                WORDS_COL_ID_DEGREE + " = " + degreeID, null, null,
-                null, null);
+        return sqLiteDB.query(table, null, "(" +
+                WORDS_COL_ID_DEGREE + " = " + degreeID + ")" + sel, null, null,
+                null, WORDS_COL_WORD);
     }
 
     public Cursor getThemesData() {
@@ -105,24 +112,6 @@ public class DBHelper {
                 null, null);
         cursor.moveToFirst();
         return cursor.getInt(cursor.getColumnIndex(DEGREE_COL_ID));
-    }
-
-    public String getNameById(String TABLE_NAME, long id) {
-
-        String COL_ID, COL_NAME;
-        if (TABLE_NAME.equals(THEMES_TABLE_NAME)) {
-            COL_ID = THEMES_COL_ID;
-            COL_NAME = THEMES_COL_NAME;
-        } else {
-            COL_ID = DEGREE_COL_ID;
-            COL_NAME = DEGREE_COL_NAME;
-        }
-
-        Cursor cursor = sqLiteDB.query(TABLE_NAME, null,
-                COL_ID + " = \'" + id + "\'", null, null,
-                null, null);
-        cursor.moveToFirst();
-        return cursor.getString(cursor.getColumnIndex(COL_NAME));
     }
 
     private class DBCreate extends SQLiteOpenHelper {
