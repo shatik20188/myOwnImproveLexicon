@@ -26,6 +26,7 @@
     <string name="add">Add</string>
     <string name="back">Back</string>
     <string name="degree">Degree</string>
+    <string name="degrees">Degrees</string>
     <string name="theme">Theme</string>
     <string name="themes">Themes</string>
     <string name="title_activity_themes">ThemesActivity</string>
@@ -34,4 +35,11 @@
     <string name="filter">Filter</string>
     <string name="reset">Reset</string>
     <string name="ok">Ok</string>
+    <string name="start">Start</string>
+    <string name="count">Count</string>
+
+    <string-array name="learn_mode">
+        <item>Word - Translate</item>
+        <item>Translate - Word</item>
+    </string-array>
 </resources>

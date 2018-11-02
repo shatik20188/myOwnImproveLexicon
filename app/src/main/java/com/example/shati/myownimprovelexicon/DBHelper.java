@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class DBHelper {
     final static public String DATABASE_NAME = "db_of_words";
     final static public int DATABASE_VERSION = 1;
@@ -112,6 +114,33 @@ public class DBHelper {
                 null, null);
         cursor.moveToFirst();
         return cursor.getInt(cursor.getColumnIndex(DEGREE_COL_ID));
+    }
+
+    public int getCountWordsByFilter(String[] degrees, String[] themes) {
+
+        String degreesIdSelect = "";
+        for (String degree : degrees) {
+            degreesIdSelect = degreesIdSelect.concat( String.valueOf(getDegreeIdByName(degree)) + "," );
+        }
+
+        String themesIdSelect = "";
+        for (String theme : themes) {
+            themesIdSelect = themesIdSelect.concat( String.valueOf(getThemeIdByName(theme)) + "," );
+        }
+
+        if (degreesIdSelect.equals("") | themesIdSelect.equals("")) return 0;
+
+        degreesIdSelect = degreesIdSelect.substring(0, degreesIdSelect.length()-1);
+        themesIdSelect = themesIdSelect.substring(0, themesIdSelect.length()-1);
+
+        String selection = "(" + WORDS_COL_ID_DEGREE + " IN (" + degreesIdSelect + ")) AND ("
+                + WORDS_COL_ID_THEME + " IN (" + themesIdSelect + "))";
+
+        Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
+                selection, null, null,
+                null, null);
+
+        return cursor.getCount();
     }
 
     private class DBCreate extends SQLiteOpenHelper {

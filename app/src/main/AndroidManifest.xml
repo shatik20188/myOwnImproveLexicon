@@ -28,7 +28,8 @@
             android:name=".ThemesActivity"
             android:label="@string/themes"
             android:theme="@style/AppTheme" />
-        <activity android:name=".EditWordActivity"></activity>
+        <activity android:name=".EditWordActivity" />
+        <activity android:name=".LearnActivity"></activity>
     </application>
 
 </manifest>

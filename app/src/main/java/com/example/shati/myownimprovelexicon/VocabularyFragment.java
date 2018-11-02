@@ -17,9 +17,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class VocabularyFragment extends Fragment {
 
     public static final int REQUEST_FILTER = 1;
@@ -33,11 +30,6 @@ public class VocabularyFragment extends Fragment {
     Context context;
     AdapterHelperForListView adapterHelper;
     DBHelper dbHelper;
-
-    public VocabularyFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
