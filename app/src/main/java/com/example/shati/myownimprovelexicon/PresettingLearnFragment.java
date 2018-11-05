@@ -34,12 +34,15 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
     DBHelper dbHelper;
     Spinner spinMode;
     TextView countOfWords;
-    Button btnStart, btnCountWords;
+    Button btnStart;
     LinearLayout linLayDegree, linLayTheme;
 
     ArrayList<String> degreeList;
     ArrayList<String> themesList;
     int modeLearn;
+
+    public final static int MODE_WORD_TRANSLATE = 0;
+    public final static int MODE_TRANSLATE_WORD = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,8 +111,6 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinMode.setAdapter(spinAdapter);
 
-        modeLearn = spinMode.getSelectedItemPosition();
-
         String strWords = "Words: "
                 + String.valueOf( dbHelper.getCountWordsByFilter(degreeStrArray, themesStrArray) );
         countOfWords.setText(strWords);
@@ -119,6 +120,7 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.preset_BtnStart:
+                modeLearn = spinMode.getSelectedItemPosition();
 
                 Intent intent = new Intent(context, LearnActivity.class);
                 intent.putExtra("themes", themesList);

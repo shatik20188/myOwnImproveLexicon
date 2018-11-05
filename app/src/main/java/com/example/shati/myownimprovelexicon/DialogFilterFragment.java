@@ -52,17 +52,6 @@ public class DialogFilterFragment extends DialogFragment implements View.OnClick
         }
     }
 
-    public DialogFilterFragment() {
-        // Required empty public constructor
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-        return super.onCreateDialog(savedInstanceState);
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

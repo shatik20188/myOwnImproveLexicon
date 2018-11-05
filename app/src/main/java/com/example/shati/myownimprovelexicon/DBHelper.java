@@ -92,6 +92,30 @@ public class DBHelper {
                 null, null);
     }
 
+    public Cursor getWordsByFilter(String[] degrees, String[] themes) {
+        String degreesIdSelect = "";
+        for (String degree : degrees) {
+            degreesIdSelect = degreesIdSelect.concat( String.valueOf(getDegreeIdByName(degree)) + "," );
+        }
+
+        String themesIdSelect = "";
+        for (String theme : themes) {
+            themesIdSelect = themesIdSelect.concat( String.valueOf(getThemeIdByName(theme)) + "," );
+        }
+
+        if (degreesIdSelect.equals("") | themesIdSelect.equals("")) return null;
+
+        degreesIdSelect = degreesIdSelect.substring(0, degreesIdSelect.length()-1);
+        themesIdSelect = themesIdSelect.substring(0, themesIdSelect.length()-1);
+
+        String selection = "(" + WORDS_COL_ID_DEGREE + " IN (" + degreesIdSelect + ")) AND ("
+                + WORDS_COL_ID_THEME + " IN (" + themesIdSelect + "))";
+
+        return sqLiteDB.query(WORDS_TABLE_NAME, null,
+                selection, null, null,
+                null, null);
+    }
+
     public void delWordByWord(String word) {
         sqLiteDB.delete(WORDS_TABLE_NAME, WORDS_COL_WORD + " = \'" + word + "\'", null);
     }
@@ -141,6 +165,22 @@ public class DBHelper {
                 null, null);
 
         return cursor.getCount();
+    }
+
+    public String getThemeNameById(int id) {
+        Cursor cursor = sqLiteDB.query(THEMES_TABLE_NAME, null,
+                THEMES_COL_ID + " = " + String.valueOf(id), null, null,
+                null, null);
+        cursor.moveToFirst();
+        return cursor.getString(cursor.getColumnIndex(THEMES_COL_NAME));
+    }
+
+    public String getDegreeNameById(int id) {
+        Cursor cursor = sqLiteDB.query(DEGREE_TABLE_NAME, null,
+                DEGREE_COL_ID + " = " + String.valueOf(id), null, null,
+                null, null);
+        cursor.moveToFirst();
+        return cursor.getString(cursor.getColumnIndex(DEGREE_COL_NAME));
     }
 
     private class DBCreate extends SQLiteOpenHelper {
