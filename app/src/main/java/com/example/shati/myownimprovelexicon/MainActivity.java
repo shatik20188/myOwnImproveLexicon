@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -124,8 +126,20 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+    public static boolean isEmptyEditText(EditText editText) {
+        String str = editText.getText().toString();
+        for(int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != ' ') return false;
+        }
+        return true;
+    }
 
+    public static void delSpacesEditText(EditText editText) {
+        String str = editText.getText().toString();
+        int start, end;
+        for(start = 0; str.charAt(start)==' '; start++);
+        for(end = str.length()-1; str.charAt(end)==' '; end--);
+
+        editText.setText(str.substring(start,end+1));
     }
 }

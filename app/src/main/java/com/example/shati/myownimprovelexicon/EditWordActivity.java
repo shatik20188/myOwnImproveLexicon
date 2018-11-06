@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class EditWordActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -19,6 +20,7 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
     EditText editTextWord, editTextTranslate;
     DBHelper dbHelper;
     SimpleCursorAdapter spinAdapter;
+    String defaultWord;
     long idWord;
 
     @Override
@@ -55,8 +57,8 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinTheme.setAdapter(spinAdapter);
 
-        String word = getIntent().getStringExtra("word");
-        cursor = dbHelper.getWordByWord(word);
+        defaultWord = getIntent().getStringExtra("word");
+        cursor = dbHelper.getWordByWord(defaultWord);
         cursor.moveToFirst();
 
         idWord = cursor.getLong(cursor.getColumnIndex(DBHelper.WORDS_COL_ID));
@@ -68,6 +70,7 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
         editTextTranslate.setText(cursor.getString(cursor.getColumnIndex(DBHelper.WORDS_COL_TRANSLATE)));
         setSpinnerSelectionById(spinDegree, idDegree);
         setSpinnerSelectionById(spinTheme, idTheme);
+
     }
 
     private void setSpinnerSelectionById(Spinner spin, long id) {
@@ -98,8 +101,21 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
                     themesData[i] = cursor.getString(cursor.getColumnIndex(DBHelper.THEMES_COL_NAME));
                 }
 
+                if (MainActivity.isEmptyEditText(editTextWord) |
+                        MainActivity.isEmptyEditText(editTextTranslate)) {
+                    Toast.makeText(this, R.string.not_all_fields_are_filled, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                MainActivity.delSpacesEditText(editTextWord);
+                MainActivity.delSpacesEditText(editTextTranslate);
                 String enteredWord = editTextWord.getText().toString();
                 String enteredTranslate = editTextTranslate.getText().toString();
+                if (!enteredWord.equals(defaultWord)
+                        & !dbHelper.checkIsNewRecord(DBHelper.WORDS_TABLE_NAME, DBHelper.WORDS_COL_WORD, enteredWord)) {
+
+                    Toast.makeText(this, R.string.the_word_is_already_there, Toast.LENGTH_SHORT).show();
+                    break;
+                }
 
                 String chosenTheme = themesData[spinTheme.getSelectedItemPosition()];
                 String chosenDegree = degreeData[spinDegree.getSelectedItemPosition()];

@@ -183,6 +183,13 @@ public class DBHelper {
         return cursor.getString(cursor.getColumnIndex(DEGREE_COL_NAME));
     }
 
+    public boolean checkIsNewRecord(String table, String col, String word) {
+        Cursor cursor = sqLiteDB.query(table, null, col + " = \'" + word + "\'",
+                null, null,
+                null, null);
+        return !cursor.moveToFirst();
+    }
+
     private class DBCreate extends SQLiteOpenHelper {
 
         public DBCreate() {

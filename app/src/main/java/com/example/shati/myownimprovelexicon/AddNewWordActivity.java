@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 public class AddNewWordActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,8 +84,19 @@ public class AddNewWordActivity extends AppCompatActivity implements View.OnClic
                     themesData[i] = cursor.getString(cursor.getColumnIndex(DBHelper.THEMES_COL_NAME));
                 }
 
+                if (MainActivity.isEmptyEditText(editTextWord) |
+                        MainActivity.isEmptyEditText(editTextTranslate)) {
+                    Toast.makeText(this, R.string.not_all_fields_are_filled, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                MainActivity.delSpacesEditText(editTextWord);
+                MainActivity.delSpacesEditText(editTextTranslate);
                 String enteredWord = editTextWord.getText().toString();
                 String enteredTranslate = editTextTranslate.getText().toString();
+                if (!dbHelper.checkIsNewRecord(DBHelper.WORDS_TABLE_NAME, DBHelper.WORDS_COL_WORD, enteredWord)) {
+                    Toast.makeText(this, R.string.the_word_is_already_there, Toast.LENGTH_SHORT).show();
+                    break;
+                }
 
                 String chosenTheme = themesData[spinTheme.getSelectedItemPosition()];
                 String chosenDegree = degreeData[spinDegree.getSelectedItemPosition()];

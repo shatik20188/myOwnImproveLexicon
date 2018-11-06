@@ -59,24 +59,30 @@ public class ThemesActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.themes_AddThemes) {
-            if(themeName.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Empty field", Toast.LENGTH_LONG).show();
+            if(MainActivity.isEmptyEditText(themeName)) {
+                Toast.makeText(this, R.string.not_all_fields_are_filled, Toast.LENGTH_SHORT).show();
             } else {
-                ContentValues cv = new ContentValues();
-                cv.put(DBHelper.THEMES_COL_NAME, themeName.getText().toString());
-                dbHelper.getSQLiteDatabase().insert(DBHelper.THEMES_TABLE_NAME, null, cv);
-                adapter.notifyDataSetChanged();
-                ////
-                Cursor cursor = dbHelper.getThemesData();
-                String[] itemsFrom = { DBHelper.THEMES_COL_NAME };
-                int[] itemsTo = { android.R.id.text1 };
+                MainActivity.delSpacesEditText(themeName);
+                if(!dbHelper.checkIsNewRecord(DBHelper.THEMES_TABLE_NAME, DBHelper.THEMES_COL_NAME,
+                        themeName.getText().toString())) {
+                    Toast.makeText(this, R.string.the_word_is_already_there, Toast.LENGTH_SHORT).show();
+                } else {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DBHelper.THEMES_COL_NAME, themeName.getText().toString());
+                    dbHelper.getSQLiteDatabase().insert(DBHelper.THEMES_TABLE_NAME, null, cv);
+                    adapter.notifyDataSetChanged();
 
-                themesListView = (ListView) findViewById(R.id.themes_ListView);
-                adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
-                        itemsFrom, itemsTo, 0);
-                themesListView.setAdapter(adapter);
-                /////
-                themeName.setText("");
+                    Cursor cursor = dbHelper.getThemesData();
+                    String[] itemsFrom = {DBHelper.THEMES_COL_NAME};
+                    int[] itemsTo = {android.R.id.text1};
+
+                    themesListView = (ListView) findViewById(R.id.themes_ListView);
+                    adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
+                            itemsFrom, itemsTo, 0);
+                    themesListView.setAdapter(adapter);
+
+                    themeName.setText("");
+                }
             }
         } else if (view.getId() == R.id.themes_Back) {
             finish();
@@ -95,21 +101,23 @@ public class ThemesActivity extends AppCompatActivity implements View.OnClickLis
             AdapterView.AdapterContextMenuInfo acmi =
                     (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             String theme = ((AppCompatTextView)acmi.targetView.findViewById(android.R.id.text1)).getText().toString();
-            dbHelper.delThemeByTheme(theme);
 
-            adapter.notifyDataSetChanged();
-            ////
-            Cursor cursor = dbHelper.getThemesData();
-            String[] itemsFrom = { DBHelper.THEMES_COL_NAME };
-            int[] itemsTo = { android.R.id.text1 };
+            if (theme.equals( getResources().getString(R.string.no_subject) ) ) {
+                Toast.makeText(this, R.string.no_subj_cant_del, Toast.LENGTH_SHORT).show();
+            } else {
+                dbHelper.delThemeByTheme(theme);
 
-            themesListView = (ListView) findViewById(R.id.themes_ListView);
-            adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
-                    itemsFrom, itemsTo, 0);
-            themesListView.setAdapter(adapter);
-            /////
+                adapter.notifyDataSetChanged();
 
+                Cursor cursor = dbHelper.getThemesData();
+                String[] itemsFrom = {DBHelper.THEMES_COL_NAME};
+                int[] itemsTo = {android.R.id.text1};
 
+                themesListView = (ListView) findViewById(R.id.themes_ListView);
+                adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
+                        itemsFrom, itemsTo, 0);
+                themesListView.setAdapter(adapter);
+            }
         }
         return super.onContextItemSelected(item);
     }

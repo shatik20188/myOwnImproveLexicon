@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
     ArrayList<String> degreeList;
     ArrayList<String> themesList;
     int modeLearn;
+    int countWords;
 
     public final static int MODE_WORD_TRANSLATE = 0;
     public final static int MODE_TRANSLATE_WORD = 1;
@@ -111,8 +113,9 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinMode.setAdapter(spinAdapter);
 
+        countWords = dbHelper.getCountWordsByFilter(degreeStrArray, themesStrArray);
         String strWords = "Words: "
-                + String.valueOf( dbHelper.getCountWordsByFilter(degreeStrArray, themesStrArray) );
+                + String.valueOf( countWords );
         countOfWords.setText(strWords);
     }
 
@@ -120,13 +123,19 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.preset_BtnStart:
-                modeLearn = spinMode.getSelectedItemPosition();
 
-                Intent intent = new Intent(context, LearnActivity.class);
-                intent.putExtra("themes", themesList);
-                intent.putExtra("degrees", degreeList);
-                intent.putExtra("mode", modeLearn);
-                startActivity(intent);
+                if (countWords == 0) {
+                    Toast.makeText(context, R.string.no_words, Toast.LENGTH_SHORT).show();
+                } else {
+
+                    modeLearn = spinMode.getSelectedItemPosition();
+
+                    Intent intent = new Intent(context, LearnActivity.class);
+                    intent.putExtra("themes", themesList);
+                    intent.putExtra("degrees", degreeList);
+                    intent.putExtra("mode", modeLearn);
+                    startActivity(intent);
+                }
                 break;
 
         }
@@ -163,8 +172,9 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
             themesStrArray[i] = themesList.get(i);
         }
 
+        countWords = dbHelper.getCountWordsByFilter(degreeStrArray, themesStrArray);
         String strWords = "Words: "
-                + String.valueOf( dbHelper.getCountWordsByFilter(degreeStrArray, themesStrArray) );
+                + String.valueOf( countWords );
         countOfWords.setText(strWords);
 
     }

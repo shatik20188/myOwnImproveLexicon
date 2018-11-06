@@ -42,4 +42,9 @@
         <item>Word - Translate</item>
         <item>Translate - Word</item>
     </string-array>
+
+    <string name="not_all_fields_are_filled">Not all fields are filled</string>
+    <string name="the_word_is_already_there">The word is already there</string>
+    <string name="no_subj_cant_del">This theme cannot be removed</string>
+    <string name="no_words">No words</string>
 </resources>
