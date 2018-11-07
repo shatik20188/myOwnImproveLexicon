@@ -4,9 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
@@ -28,16 +26,16 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_word);
 
-        btnBack = (Button) findViewById(R.id.editW_Back);
+        btnBack = findViewById(R.id.editW_Back);
         btnBack.setOnClickListener(this);
-        btnEdit = (Button) findViewById(R.id.editW_EditWord);
+        btnEdit = findViewById(R.id.editW_EditWord);
         btnEdit.setOnClickListener(this);
-        spinDegree = (Spinner) findViewById(R.id.editW_SpinDegree);
-        spinTheme = (Spinner) findViewById(R.id.editW_SpinTheme);
-        editTextTranslate = (EditText) findViewById(R.id.editW_Translate);
-        editTextWord = (EditText) findViewById(R.id.editW_Word);
+        spinDegree = findViewById(R.id.editW_SpinDegree);
+        spinTheme = findViewById(R.id.editW_SpinTheme);
+        editTextTranslate = findViewById(R.id.editW_Translate);
+        editTextWord = findViewById(R.id.editW_Word);
         dbHelper = new DBHelper(this);
-        dbHelper.open(true);
+        dbHelper.open();
 
         String[] degreeFrom = { DBHelper.DEGREE_COL_NAME };
         int[] degreeTo = { android.R.id.text1 };

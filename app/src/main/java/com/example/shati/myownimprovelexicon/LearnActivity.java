@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class LearnActivity extends AppCompatActivity implements View.OnClickList
     TextView textCount, textWord, textTranslate, textDegree, textTheme;
     DBHelper dbHelper;
     AdapterHelperForListView adapterHelper;
+    LinearLayout linlayNext;
 
     private int indexRandomWord;
     private int mode;
@@ -47,26 +49,27 @@ public class LearnActivity extends AppCompatActivity implements View.OnClickList
 
         adapterHelper = new AdapterHelperForListView(this);
         dbHelper = adapterHelper.dbHelper;
-        dbHelper.open(true);
+        dbHelper.open();
 
-        btnEdit = (Button) findViewById(R.id.learn_BtnEditWord);
+        linlayNext = findViewById(R.id.learn_LinLayBtn);
+        btnEdit = findViewById(R.id.learn_BtnEditWord);
         btnEdit.setOnClickListener(this);
-        btnNext = (Button) findViewById(R.id.learn_BtnNextWord);
+        btnNext = findViewById(R.id.learn_BtnNextWord);
         btnNext.setOnClickListener(this);
-        btnShowTranslate = (Button) findViewById(R.id.learn_BtnShowTranslate);
+        btnShowTranslate = findViewById(R.id.learn_BtnShowTranslate);
         btnShowTranslate.setOnClickListener(this);
-        textCount = (TextView) findViewById(R.id.learn_CountWords);
-        textTheme = (TextView) findViewById(R.id.learn_Theme);
-        textDegree = (TextView) findViewById(R.id.learn_Degree);
-        textTranslate = (TextView) findViewById(R.id.learn_Translate);
-        textWord = (TextView) findViewById(R.id.learn_Word);
+        textCount = findViewById(R.id.learn_CountWords);
+        textTheme = findViewById(R.id.learn_Theme);
+        textDegree = findViewById(R.id.learn_Degree);
+        textTranslate = findViewById(R.id.learn_Translate);
+        textWord = findViewById(R.id.learn_Word);
 
         wordAllInfo = new ArrayList<>();
-        ArrayList<Map<String, String>> wordOneInfo = new ArrayList<>();
-        Map<String, String> wordWordInfo = new HashMap<>();
-        Map<String, String> wordTranslateInfo = new HashMap<>();
-        Map<String, String> wordThemeInfo = new HashMap<>();
-        Map<String, String> wordDegreeInfo = new HashMap<>();
+        ArrayList<Map<String, String>> wordOneInfo;
+        Map<String, String> wordWordInfo;
+        Map<String, String> wordTranslateInfo;
+        Map<String, String> wordThemeInfo;
+        Map<String, String> wordDegreeInfo;
 
         String[] degreeStrArray = new String[degreeList.size()];
         for (int i = 0; i < degreeList.size(); i++) {
@@ -111,9 +114,8 @@ public class LearnActivity extends AppCompatActivity implements View.OnClickList
         textTranslate.setVisibility(TextView.INVISIBLE);
         textTheme.setVisibility(TextView.INVISIBLE);
         textDegree.setVisibility(TextView.INVISIBLE);
-        btnShowTranslate.setClickable(true);
-        btnNext.setClickable(false);
-        btnEdit.setClickable(false);
+        linlayNext.setVisibility(LinearLayout.INVISIBLE);
+        btnShowTranslate.setVisibility(Button.VISIBLE);
 
         wordAllInfo.trimToSize();
         textCount.setText(String.valueOf(wordAllInfo.size()));
@@ -135,12 +137,11 @@ public class LearnActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.learn_BtnShowTranslate:
-                btnShowTranslate.setClickable(false);
-                btnEdit.setClickable(true);
-                btnNext.setClickable(true);
                 textTranslate.setVisibility(TextView.VISIBLE);
                 textTheme.setVisibility(TextView.VISIBLE);
                 textDegree.setVisibility(TextView.VISIBLE);
+                btnShowTranslate.setVisibility(Button.INVISIBLE);
+                linlayNext.setVisibility(LinearLayout.VISIBLE);
                 break;
             case R.id.learn_BtnEditWord:
                 Intent intent = new Intent(this, EditWordActivity.class);

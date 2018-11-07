@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 public class AddNewWordActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,19 +25,19 @@ public class AddNewWordActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_word);
 
-        btnBack = (Button) findViewById(R.id.addNW_Back);
+        btnBack = findViewById(R.id.addNW_Back);
         btnBack.setOnClickListener(this);
-        btnAddWord = (Button) findViewById(R.id.addNW_addWord);
+        btnAddWord =  findViewById(R.id.addNW_addWord);
         btnAddWord.setOnClickListener(this);
 
-        spinDegree = (Spinner) findViewById(R.id.addNW_SpinDegree);
-        spinTheme = (Spinner) findViewById(R.id.addNW_SpinTheme);
+        spinDegree = findViewById(R.id.addNW_SpinDegree);
+        spinTheme = findViewById(R.id.addNW_SpinTheme);
 
-        editTextTranslate = (EditText) findViewById(R.id.addNW_Translate);
-        editTextWord = (EditText) findViewById(R.id.addNW_Word);
+        editTextTranslate = findViewById(R.id.addNW_Translate);
+        editTextWord = findViewById(R.id.addNW_Word);
 
         dbHelper = new DBHelper(this);
-        dbHelper.open(true);
+        dbHelper.open();
 
         String[] degreeFrom = { DBHelper.DEGREE_COL_NAME };
         int[] degreeTo = { android.R.id.text1 };

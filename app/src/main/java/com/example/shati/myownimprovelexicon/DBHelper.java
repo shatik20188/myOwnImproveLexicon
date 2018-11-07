@@ -1,51 +1,43 @@
 package com.example.shati.myownimprovelexicon;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
-import android.util.Log;
-
-import java.util.ArrayList;
 
 public class DBHelper {
-    final static public String DATABASE_NAME = "db_of_words";
-    final static public int DATABASE_VERSION = 1;
+    private final static String DATABASE_NAME = "db_of_words";
+    private final static int DATABASE_VERSION = 1;
 
-    final static public String THEMES_TABLE_NAME = "themes";
-    final static public String WORDS_TABLE_NAME = "words";
-    final static public String DEGREE_TABLE_NAME = "degree";
+    final static String THEMES_TABLE_NAME = "themes";
+    final static String WORDS_TABLE_NAME = "words";
+    private final static String DEGREE_TABLE_NAME = "degree";
 
-    final static public String THEMES_COL_ID = "_id";
-    final static public String THEMES_COL_NAME = "name";
+    private final static String THEMES_COL_ID = "_id";
+    final static String THEMES_COL_NAME = "name";
 
-    final static public String DEGREE_COL_ID = "_id";
-    final static public String DEGREE_COL_NAME = "name";
+    final static String DEGREE_COL_ID = "_id";
+    final static String DEGREE_COL_NAME = "name";
 
-    final static public String WORDS_COL_ID = "_id";
-    final static public String WORDS_COL_WORD = "word";
-    final static public String WORDS_COL_TRANSLATE = "translate";
-    final static public String WORDS_COL_ID_DEGREE = "id_degree";
-    final static public String WORDS_COL_ID_THEME = "id_theme";
+    final static String WORDS_COL_ID = "_id";
+    final static String WORDS_COL_WORD = "word";
+    final static String WORDS_COL_TRANSLATE = "translate";
+    final static String WORDS_COL_ID_DEGREE = "id_degree";
+    final static String WORDS_COL_ID_THEME = "id_theme";
 
     private Context ctx;
     private DBCreate dbCreate;
     private SQLiteDatabase sqLiteDB;
 
-    public DBHelper(Context _ctx) {
+    DBHelper(Context _ctx) {
         ctx = _ctx;
     }
 
-    public void open(boolean isWrite) {
+    void open() {
         dbCreate = new DBCreate();
-        if (isWrite) {
-            sqLiteDB = dbCreate.getWritableDatabase();
-        } else {
-            sqLiteDB = dbCreate.getReadableDatabase();
-        }
+        sqLiteDB = dbCreate.getWritableDatabase();
     }
 
     public void close() {
@@ -54,16 +46,16 @@ public class DBHelper {
         }
     }
 
-    public SQLiteDatabase getSQLiteDatabase() {
+    SQLiteDatabase getSQLiteDatabase() {
         return sqLiteDB;
     }
 
-    public Cursor getDegreeData() {
+    Cursor getDegreeData() {
         return sqLiteDB.query(DEGREE_TABLE_NAME, null, null, null,
                 null, null, null);
     }
 
-    public Cursor getWordsFromDegree(long degreeID, long themeId) {
+    Cursor getWordsFromDegree(long degreeID, long themeId) {
 
         String sel;
         if (themeId == -10) {
@@ -81,18 +73,18 @@ public class DBHelper {
                 null, WORDS_COL_WORD);
     }
 
-    public Cursor getThemesData() {
+    Cursor getThemesData() {
         return sqLiteDB.query(THEMES_TABLE_NAME, null, null, null,
                 null, null, null);
     }
 
-    public Cursor getWordByWord(String word) {
+    Cursor getWordByWord(String word) {
         return sqLiteDB.query(WORDS_TABLE_NAME, null,
                 WORDS_COL_WORD + " = \'" + word + "\'", null, null,
                 null, null);
     }
 
-    public Cursor getWordsByFilter(String[] degrees, String[] themes) {
+    Cursor getWordsByFilter(String[] degrees, String[] themes) {
         String degreesIdSelect = "";
         for (String degree : degrees) {
             degreesIdSelect = degreesIdSelect.concat( String.valueOf(getDegreeIdByName(degree)) + "," );
@@ -116,31 +108,31 @@ public class DBHelper {
                 null, null);
     }
 
-    public void delWordByWord(String word) {
+    void delWordByWord(String word) {
         sqLiteDB.delete(WORDS_TABLE_NAME, WORDS_COL_WORD + " = \'" + word + "\'", null);
     }
 
-    public void delThemeByTheme(String theme) {
+   void delThemeByTheme(String theme) {
         sqLiteDB.delete(THEMES_TABLE_NAME, THEMES_COL_NAME + " = \'" + theme + "\'", null);
     }
 
-    public int getThemeIdByName(String name) {
-        Cursor cursor = sqLiteDB.query(THEMES_TABLE_NAME, null,
+    int getThemeIdByName(String name) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(THEMES_TABLE_NAME, null,
                 THEMES_COL_NAME + " = \'" + name + "\'", null, null,
                 null, null);
         cursor.moveToFirst();
         return cursor.getInt(cursor.getColumnIndex(THEMES_COL_ID));
     }
 
-    public int getDegreeIdByName(String name) {
-        Cursor cursor = sqLiteDB.query(DEGREE_TABLE_NAME, null,
+    int getDegreeIdByName(String name) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(DEGREE_TABLE_NAME, null,
                 DEGREE_COL_NAME + " = \'" + name + "\'", null, null,
                 null, null);
         cursor.moveToFirst();
         return cursor.getInt(cursor.getColumnIndex(DEGREE_COL_ID));
     }
 
-    public int getCountWordsByFilter(String[] degrees, String[] themes) {
+    int getCountWordsByFilter(String[] degrees, String[] themes) {
 
         String degreesIdSelect = "";
         for (String degree : degrees) {
@@ -160,31 +152,31 @@ public class DBHelper {
         String selection = "(" + WORDS_COL_ID_DEGREE + " IN (" + degreesIdSelect + ")) AND ("
                 + WORDS_COL_ID_THEME + " IN (" + themesIdSelect + "))";
 
-        Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
                 selection, null, null,
                 null, null);
 
         return cursor.getCount();
     }
 
-    public String getThemeNameById(int id) {
-        Cursor cursor = sqLiteDB.query(THEMES_TABLE_NAME, null,
+    String getThemeNameById(int id) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(THEMES_TABLE_NAME, null,
                 THEMES_COL_ID + " = " + String.valueOf(id), null, null,
                 null, null);
         cursor.moveToFirst();
         return cursor.getString(cursor.getColumnIndex(THEMES_COL_NAME));
     }
 
-    public String getDegreeNameById(int id) {
-        Cursor cursor = sqLiteDB.query(DEGREE_TABLE_NAME, null,
+    String getDegreeNameById(int id) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(DEGREE_TABLE_NAME, null,
                 DEGREE_COL_ID + " = " + String.valueOf(id), null, null,
                 null, null);
         cursor.moveToFirst();
         return cursor.getString(cursor.getColumnIndex(DEGREE_COL_NAME));
     }
 
-    public boolean checkIsNewRecord(String table, String col, String word) {
-        Cursor cursor = sqLiteDB.query(table, null, col + " = \'" + word + "\'",
+    boolean checkIsNewRecord(String table, String col, String word) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(table, null, col + " = \'" + word + "\'",
                 null, null,
                 null, null);
         return !cursor.moveToFirst();
@@ -192,7 +184,7 @@ public class DBHelper {
 
     private class DBCreate extends SQLiteOpenHelper {
 
-        public DBCreate() {
+        DBCreate() {
             super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
         }
 

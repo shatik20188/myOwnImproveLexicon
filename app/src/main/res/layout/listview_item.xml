@@ -13,7 +13,7 @@
         android:gravity="center_vertical"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:text="word"
+        android:text="@string/textview"
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:textSize="18sp" />
 
@@ -24,7 +24,7 @@
         android:gravity="center_vertical"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:text="translate"
+        android:text="@string/textview"
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:textColor="@color/colorTranslateWord" />
 
@@ -35,7 +35,7 @@
         android:gravity="center_vertical|end"
         android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
         android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:text="theme"
+        android:text="@string/textview"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:textSize="14sp"

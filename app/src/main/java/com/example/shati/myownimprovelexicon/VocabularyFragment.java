@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -32,14 +33,14 @@ public class VocabularyFragment extends Fragment {
     DBHelper dbHelper;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         viewFragm = inflater.inflate(R.layout.fragment_vocabulary, container, false);
         context = container.getContext();
         adapterHelper = new AdapterHelperForListView(context);
         dbHelper = adapterHelper.dbHelper;
-        dbHelper.open(true);
+        dbHelper.open();
 
         return viewFragm;
     }
@@ -48,7 +49,7 @@ public class VocabularyFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        vocListView = (ExpandableListView) viewFragm.findViewById(R.id.vocListView);
+        vocListView = viewFragm.findViewById(R.id.vocListView);
         vocListView.setAdapter( adapterHelper.getAdapter() );
         registerForContextMenu(vocListView);
     }

@@ -27,7 +27,7 @@
         android:layout_gravity="center"
         android:layout_marginEnd="10dp"
         android:layout_weight="0"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/todo"
         app:srcCompat="@drawable/ic_menu_gallery" />
 
 </LinearLayout>

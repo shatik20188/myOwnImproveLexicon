@@ -1,16 +1,13 @@
 package com.example.shati.myownimprovelexicon;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +40,12 @@ public class DialogFilterFragment extends DialogFragment implements View.OnClick
 
                 Intent intent = new Intent();
                 intent.putExtra("theme", chosenTheme);
+                assert getTargetFragment() != null;
                 getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                 dismiss();
                 break;
             case R.id.filter_Reset:
+                assert getTargetFragment() != null;
                 getTargetFragment().onActivityResult(2, Activity.RESULT_OK, null);
                 dismiss();
         }
@@ -59,13 +58,13 @@ public class DialogFilterFragment extends DialogFragment implements View.OnClick
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getDialog().setTitle(R.string.filter);
         viewFragm = inflater.inflate(R.layout.fragment_dialog_filter, container, false);
         context = getContext();
         dbHelper = new DBHelper(context);
-        dbHelper.open(true);
+        dbHelper.open();
 
         return viewFragm;
     }
@@ -74,11 +73,11 @@ public class DialogFilterFragment extends DialogFragment implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        btnOK = (Button) viewFragm.findViewById(R.id.filter_Ok);
+        btnOK = viewFragm.findViewById(R.id.filter_Ok);
         btnOK.setOnClickListener(this);
-        btnReset = (Button) viewFragm.findViewById(R.id.filter_Reset);
+        btnReset = viewFragm.findViewById(R.id.filter_Reset);
         btnReset.setOnClickListener(this);
-        spinFilter = (Spinner) viewFragm.findViewById(R.id.filter_Spinner);
+        spinFilter = viewFragm.findViewById(R.id.filter_Spinner);
 
         String[] themesFrom = { DBHelper.THEMES_COL_NAME };
         int[] themesTo = { android.R.id.text1 };

@@ -5,31 +5,45 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_well"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_well_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        >
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".AddNewWordActivity"
-            android:label="@string/add_new_word" />
+            android:label="@string/add_new_word"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ThemesActivity"
             android:label="@string/themes"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".EditWordActivity" />
-        <activity android:name=".LearnActivity"></activity>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".EditWordActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".LearnActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

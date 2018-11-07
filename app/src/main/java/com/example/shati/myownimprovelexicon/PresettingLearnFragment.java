@@ -5,27 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.chip.ChipGroup;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class PresettingLearnFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -44,16 +38,15 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
     int countWords;
 
     public final static int MODE_WORD_TRANSLATE = 0;
-    public final static int MODE_TRANSLATE_WORD = 1;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewFragm = inflater.inflate(R.layout.fragment_presettinglearn, container, false);
         context = container.getContext();
         adapterHelper = new AdapterHelperForListView(context);
         dbHelper = adapterHelper.dbHelper;
-        dbHelper.open(true);
+        dbHelper.open();
 
         return viewFragm;
     }
@@ -62,12 +55,12 @@ public class PresettingLearnFragment extends Fragment implements View.OnClickLis
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        spinMode = (Spinner) viewFragm.findViewById(R.id.preset_SpinMode);
-        btnStart = (Button) viewFragm.findViewById(R.id.preset_BtnStart);
+        spinMode = viewFragm.findViewById(R.id.preset_SpinMode);
+        btnStart = viewFragm.findViewById(R.id.preset_BtnStart);
         btnStart.setOnClickListener(this);
-        countOfWords = (TextView) viewFragm.findViewById(R.id.preset_CountOfWords);
-        linLayDegree = (LinearLayout) viewFragm.findViewById(R.id.preset_LinLayDegree);
-        linLayTheme = (LinearLayout) viewFragm.findViewById(R.id.preset_LinLayTheme);
+        countOfWords = viewFragm.findViewById(R.id.preset_CountOfWords);
+        linLayDegree = viewFragm.findViewById(R.id.preset_LinLayDegree);
+        linLayTheme = viewFragm.findViewById(R.id.preset_LinLayTheme);
 
         degreeList = new ArrayList<>();
         themesList = new ArrayList<>();
