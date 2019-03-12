@@ -63,30 +63,26 @@ public class VocabularyFragment extends Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, CM_DELETE_ID, Menu.NONE, "Delete word");
-        menu.add(Menu.NONE, CM_EDIT_ID, Menu.NONE, "Edit word");
+        menu.add(Menu.NONE, CM_DELETE_ID, Menu.NONE, getResources().getString(R.string.delete_word));
+        menu.add(Menu.NONE, CM_EDIT_ID, Menu.NONE, getResources().getString(R.string.edit_word));
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
         ExpandableListView.ExpandableListContextMenuInfo acmi =
                 (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
-        String word = ((TextView)acmi.targetView.findViewById(R.id.itemLV_Word)).getText().toString();
+        if((acmi.targetView.findViewById(R.id.itemLV_Word)) != null) {
+            String word = ((TextView)acmi.targetView.findViewById(R.id.itemLV_Word)).getText().toString();
 
-        if(item.getItemId() == CM_DELETE_ID) {
-
-            dbHelper.delWordByWord(word);
-            adapterHelper.notifyChanged();
-
-        } else if (item.getItemId() == CM_EDIT_ID) {
-
-            Intent intent = new Intent(context, EditWordActivity.class);
-            intent.putExtra("word", word);
-            startActivity(intent);
-
+            if(item.getItemId() == CM_DELETE_ID) {
+                dbHelper.delWordByWord(word);
+                adapterHelper.notifyChanged();
+            } else if (item.getItemId() == CM_EDIT_ID) {
+                Intent intent = new Intent(context, EditWordActivity.class);
+                intent.putExtra("word", word);
+                startActivity(intent);
+            }
         }
-
         return super.onContextItemSelected(item);
     }
 

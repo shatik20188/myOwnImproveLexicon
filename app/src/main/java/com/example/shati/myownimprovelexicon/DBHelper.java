@@ -7,6 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class DBHelper {
     private final static String DATABASE_NAME = "db_of_words";
     private final static int DATABASE_VERSION = 1;
@@ -26,6 +30,9 @@ public class DBHelper {
     final static String WORDS_COL_TRANSLATE = "translate";
     final static String WORDS_COL_ID_DEGREE = "id_degree";
     final static String WORDS_COL_ID_THEME = "id_theme";
+    final static String WORDS_COL_AMOUNT_RIGHT = "amountRight";
+    final static String WORDS_COL_AMOUNT_WRONG = "amountWrong";
+    final static String WORDS_COL_RIGHT_IN_SUCCESSION = "amountRightInSuccession";
 
     private Context ctx;
     private DBCreate dbCreate;
@@ -112,8 +119,13 @@ public class DBHelper {
         sqLiteDB.delete(WORDS_TABLE_NAME, WORDS_COL_WORD + " = \'" + word + "\'", null);
     }
 
-   void delThemeByTheme(String theme) {
+    void delThemeByTheme(String theme) {
         sqLiteDB.delete(THEMES_TABLE_NAME, THEMES_COL_NAME + " = \'" + theme + "\'", null);
+    }
+
+    void delAllWordsOfThemeByTheme(String theme) {
+        int themeId = getThemeIdByName(theme);
+        sqLiteDB.delete(WORDS_TABLE_NAME, WORDS_COL_ID_THEME + " = \'" + themeId + "\'", null);
     }
 
     int getThemeIdByName(String name) {
@@ -159,6 +171,14 @@ public class DBHelper {
         return cursor.getCount();
     }
 
+    int getWordIdByWord(String word) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
+                WORDS_COL_WORD + " = \'" + word + "\'", null, null,
+                null, null);
+        cursor.moveToFirst();
+        return cursor.getInt(cursor.getColumnIndex(WORDS_COL_ID));
+    }
+
     String getThemeNameById(int id) {
         @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(THEMES_TABLE_NAME, null,
                 THEMES_COL_ID + " = " + String.valueOf(id), null, null,
@@ -173,6 +193,76 @@ public class DBHelper {
                 null, null);
         cursor.moveToFirst();
         return cursor.getString(cursor.getColumnIndex(DEGREE_COL_NAME));
+    }
+
+    int getAmountTranslById(int id, boolean isRight) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
+                WORDS_COL_ID + " = " + String.valueOf(id), null, null,
+                null, null);
+        cursor.moveToFirst();
+        return cursor.getInt( cursor.getColumnIndex(
+                isRight ? WORDS_COL_AMOUNT_RIGHT : WORDS_COL_AMOUNT_WRONG ) );
+    }
+
+    int getAmountRightInSuccById(int id) {
+        @SuppressLint("Recycle") Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
+                WORDS_COL_ID + " = " + String.valueOf(id), null, null,
+                null, null);
+        cursor.moveToFirst();
+        return cursor.getInt( cursor.getColumnIndex(WORDS_COL_RIGHT_IN_SUCCESSION) );
+    }
+
+    void incAmountTranslById(int id, boolean isRight) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(isRight ? WORDS_COL_AMOUNT_RIGHT : WORDS_COL_AMOUNT_WRONG, getAmountTranslById(id, isRight) + 1);
+
+        getSQLiteDatabase().update(DBHelper.WORDS_TABLE_NAME,
+                cv, WORDS_COL_ID + " = ?",
+                new String[] { String.valueOf(id) } );
+
+    }
+
+    void incAmountRightInSuccById(int id, boolean isRight, int maxAmount, boolean isActiveMax) {
+
+        int val = getAmountRightInSuccById(id);
+        ContentValues cv = new ContentValues();
+        if (isRight) {
+            val++;
+            Cursor cursor = sqLiteDB.query(WORDS_TABLE_NAME, null,
+                    WORDS_COL_ID + " = " + String.valueOf(id), null, null,
+                    null, null);
+            cursor.moveToFirst();
+            int idDegreeOfWord = cursor.getInt( cursor.getColumnIndex(WORDS_COL_ID_DEGREE));
+            if(val >= maxAmount && idDegreeOfWord != 1 && isActiveMax) {
+                val = 0;
+                cv.put(WORDS_COL_ID_DEGREE, idDegreeOfWord - 1);
+            }
+        } else {
+            val = 0;
+        }
+        cv.put(WORDS_COL_RIGHT_IN_SUCCESSION, val);
+        getSQLiteDatabase().update(DBHelper.WORDS_TABLE_NAME,
+                cv, WORDS_COL_ID + " = ?",
+                new String[] { String.valueOf(id) } );
+
+    }
+
+    void setAmountRightInSuccZeroById(long id) {
+        ContentValues cv = new ContentValues();
+        cv.put(WORDS_COL_RIGHT_IN_SUCCESSION, 0);
+        getSQLiteDatabase().update(DBHelper.WORDS_TABLE_NAME,
+                cv, WORDS_COL_ID + " = ?",
+                new String[] { String.valueOf(id) } );
+    }
+
+    void replaceAllWordsToNoSubjByTheme(String _theme) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(WORDS_COL_ID_THEME, 1);
+        getSQLiteDatabase().update(WORDS_TABLE_NAME, cv, WORDS_COL_ID_THEME + " = ?",
+                new String[] { String.valueOf( getThemeIdByName(_theme) ) } );
+
     }
 
     boolean checkIsNewRecord(String table, String col, String word) {
@@ -204,7 +294,10 @@ public class DBHelper {
                     + WORDS_COL_WORD + " text, "
                     + WORDS_COL_TRANSLATE + " text, "
                     + WORDS_COL_ID_DEGREE + " integer,"
-                    + WORDS_COL_ID_THEME + " integer" + ")" );
+                    + WORDS_COL_ID_THEME + " integer,"
+                    + WORDS_COL_AMOUNT_RIGHT + " integer,"
+                    + WORDS_COL_AMOUNT_WRONG + " integer,"
+                    + WORDS_COL_RIGHT_IN_SUCCESSION + " integer" + ")" );
 
             ContentValues contentValues = new ContentValues();
             String[] degree_val = ctx.getResources().getStringArray(R.array.degree_remembered);
@@ -217,27 +310,32 @@ public class DBHelper {
 
             contentValues.clear();
             /////test block
-            contentValues.put(WORDS_COL_WORD, "apple");
-            contentValues.put(WORDS_COL_TRANSLATE, "яблоко");
+            contentValues.put(WORDS_COL_WORD, "test word 1");
+            contentValues.put(WORDS_COL_TRANSLATE, "тестовое слово 1");
             contentValues.put(WORDS_COL_ID_DEGREE, 1);
             contentValues.put(WORDS_COL_ID_THEME, 1);
+            contentValues.put(WORDS_COL_AMOUNT_RIGHT, 0);
+            contentValues.put(WORDS_COL_AMOUNT_WRONG, 0);
+            contentValues.put(WORDS_COL_RIGHT_IN_SUCCESSION, 0);
             sqLiteDatabase.insert(WORDS_TABLE_NAME, null, contentValues);
-            contentValues.put(WORDS_COL_WORD, "car");
-            contentValues.put(WORDS_COL_TRANSLATE, "тачка");
+            contentValues.put(WORDS_COL_WORD, "test word 2");
+            contentValues.put(WORDS_COL_TRANSLATE, "тестовое слово 2");
             contentValues.put(WORDS_COL_ID_DEGREE, 2);
             contentValues.put(WORDS_COL_ID_THEME, 1);
+            contentValues.put(WORDS_COL_AMOUNT_RIGHT, 0);
+            contentValues.put(WORDS_COL_AMOUNT_WRONG, 0);
+            contentValues.put(WORDS_COL_RIGHT_IN_SUCCESSION, 0);
             sqLiteDatabase.insert(WORDS_TABLE_NAME, null, contentValues);
-            contentValues.put(WORDS_COL_WORD, "man");
-            contentValues.put(WORDS_COL_TRANSLATE, "мужчина");
+            contentValues.put(WORDS_COL_WORD, "test word 3");
+            contentValues.put(WORDS_COL_TRANSLATE, "тестовое слово 3");
             contentValues.put(WORDS_COL_ID_DEGREE, 3);
             contentValues.put(WORDS_COL_ID_THEME, 1);
-            sqLiteDatabase.insert(WORDS_TABLE_NAME, null, contentValues);
-            contentValues.put(WORDS_COL_WORD, "woman");
-            contentValues.put(WORDS_COL_TRANSLATE, "женщина");
-            contentValues.put(WORDS_COL_ID_DEGREE, 3);
-            contentValues.put(WORDS_COL_ID_THEME, 1);
+            contentValues.put(WORDS_COL_AMOUNT_RIGHT, 0);
+            contentValues.put(WORDS_COL_AMOUNT_WRONG, 0);
+            contentValues.put(WORDS_COL_RIGHT_IN_SUCCESSION, 0);
             sqLiteDatabase.insert(WORDS_TABLE_NAME, null, contentValues);
             //////test block
+
             contentValues.clear();
 
             contentValues.put(THEMES_COL_NAME, ctx.getResources().getString(R.string.no_subject));

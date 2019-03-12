@@ -13,12 +13,13 @@ import android.widget.Toast;
 
 public class EditWordActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnBack, btnEdit;
+    Button btnEdit;
     Spinner spinDegree, spinTheme;
     EditText editTextWord, editTextTranslate;
     DBHelper dbHelper;
     SimpleCursorAdapter spinAdapter;
     String defaultWord;
+    int initialyDegreeSelectedItemPos;
     long idWord;
 
     @Override
@@ -26,8 +27,6 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_word);
 
-        btnBack = findViewById(R.id.editW_Back);
-        btnBack.setOnClickListener(this);
         btnEdit = findViewById(R.id.editW_EditWord);
         btnEdit.setOnClickListener(this);
         spinDegree = findViewById(R.id.editW_SpinDegree);
@@ -68,6 +67,8 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
         editTextTranslate.setText(cursor.getString(cursor.getColumnIndex(DBHelper.WORDS_COL_TRANSLATE)));
         setSpinnerSelectionById(spinDegree, idDegree);
         setSpinnerSelectionById(spinTheme, idTheme);
+
+        initialyDegreeSelectedItemPos = spinDegree.getSelectedItemPosition();
 
     }
 
@@ -121,6 +122,9 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
                 int themeId = dbHelper.getThemeIdByName(chosenTheme);
                 int degreeId = dbHelper.getDegreeIdByName(chosenDegree);
 
+                if(initialyDegreeSelectedItemPos != spinDegree.getSelectedItemPosition())
+                    dbHelper.setAmountRightInSuccZeroById(idWord);
+
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(DBHelper.WORDS_COL_WORD, enteredWord);
                 contentValues.put(DBHelper.WORDS_COL_TRANSLATE, enteredTranslate);
@@ -134,9 +138,6 @@ public class EditWordActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
 
-            case R.id.editW_Back:
-                finish();
-                break;
         }
     }
 }

@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorTranslateWord">#6e6e6e</color>
+    <color name="colorBackground">#D9DEFC</color>
 
     <color name="colorWellRem">#7d368b36</color>
     <color name="colorSosoRem">#7dcebe4a</color>
@@ -11,4 +12,8 @@
 
     <color name="colorItem1">#64cacaca</color>
     <color name="colorItem2">#64b1b1b1</color>
+
+    <color name="right">#316F31</color>
+    <color name="wrong">#792828</color>
+    <color name="inSucc">#0F8A7D</color>
 </resources>

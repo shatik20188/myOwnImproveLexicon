@@ -1,9 +1,13 @@
 package com.example.shati.myownimprovelexicon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -17,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -26,6 +32,11 @@ public class MainActivity extends AppCompatActivity
     FragmentTransaction fragTransaction;
     NavigationView navigationView;
     DialogFragment dialogFilter;
+    Menu optionMenu;
+
+    SharedPreferences sharedPref;
+    Locale locale;
+    String lang;
 
     @Override
     protected void onResume() {
@@ -36,6 +47,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        lang = sharedPref.getString("lang", "ru");
+        locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -58,7 +77,6 @@ public class MainActivity extends AppCompatActivity
         fragTransaction = getSupportFragmentManager().beginTransaction();
         fragTransaction.add(R.id.mainFrameLayout, fragVocabulary);
         fragTransaction.commit();
-
     }
 
     @Override
@@ -80,6 +98,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        optionMenu = menu;
         return true;
     }
 
@@ -114,14 +133,23 @@ public class MainActivity extends AppCompatActivity
                 fragTransaction = getSupportFragmentManager().beginTransaction();
                 fragTransaction.replace(R.id.mainFrameLayout, fragVocabulary);
                 fragTransaction.commit();
-
+                optionMenu.findItem(R.id.action_AddNewWord).setVisible(true);
+                optionMenu.findItem(R.id.action_Filter).setVisible(true);
+                optionMenu.findItem(R.id.action_Themes).setVisible(true);
             }
         } else if (id == R.id.nav_learn) {
             if ( getSupportFragmentManager().findFragmentById(R.id.mainFrameLayout) != fragLearn ) {
                 fragTransaction = getSupportFragmentManager().beginTransaction();
                 fragTransaction.replace(R.id.mainFrameLayout, fragLearn);
                 fragTransaction.commit();
+                optionMenu.findItem(R.id.action_AddNewWord).setVisible(false);
+                optionMenu.findItem(R.id.action_Filter).setVisible(false);
+                optionMenu.findItem(R.id.action_Themes).setVisible(false);
             }
+        } else if (id == R.id.nav_pref) {
+            Intent intent = new Intent(this, PrefActivity.class);
+            startActivity(intent);
+            //fragVocabulary.adapterHelper.retAdapter().notifyDataSetChanged();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -145,5 +173,15 @@ public class MainActivity extends AppCompatActivity
         for(end = str.length()-1; str.charAt(end)==' '; end--);
 
         editText.setText(str.substring(start,end+1));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
     }
 }

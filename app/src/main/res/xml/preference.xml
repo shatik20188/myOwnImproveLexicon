@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PrefFragment">
+
+    <ListPreference
+        android:key="lang"
+        android:defaultValue="ru"
+        android:title="@string/title_lang"
+        android:summary="@string/summary_lang"
+        android:entries="@array/entries_lang"
+        android:entryValues="@array/entryValues_lang"
+        android:dialogTitle="@string/title_lang"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="isActiveMaxInSucc"
+        android:title="@string/title_isActive"
+        android:summary="@string/summary_isActive"/>
+
+    <com.example.shati.myownimprovelexicon.NumberPickerDialogPreference
+        android:key="maxAmountInSucc"
+        android:title="@string/title_maxAmountInSucc"
+        android:summary="@string/summary_maxAmountInSucc"
+        android:defaultValue="3"/>
+
+
+</PreferenceScreen>

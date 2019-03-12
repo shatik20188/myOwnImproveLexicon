@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">Improve Lexicon</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="vocabulary">Vocabulary</string>
+    <string name="start_to_learn_english">Start to learn words</string>
+    <string name="by_shatik">By shatik</string>
+
+    <string-array name="degree_remembered">
+        <item>Well remembered</item>
+        <item>So so remembered</item>
+        <item>Poorly remembered</item>
+    </string-array>
+
+    <string name="no_subject">No subject</string>
+    <string name="add_new_word">Add new word</string>
+    <string name="word">Word</string>
+    <string name="translate">Translate</string>
+    <string name="add">Add</string>
+    <string name="back">Back</string>
+    <string name="degree">Degree</string>
+    <string name="degrees">Degrees</string>
+    <string name="theme">Theme</string>
+    <string name="themes">Themes</string>
+    <string name="title_activity_themes">ThemesActivity</string>
+    <string name="add_theme">Add theme</string>
+    <string name="edit">Edit</string>
+    <string name="filter">Filter</string>
+    <string name="reset">Reset</string>
+    <string name="ok">OK</string>
+    <string name="start">Start</string>
+    <string name="count">Count</string>
+
+    <string-array name="learn_mode">
+        <item>Word - Translate</item>
+        <item>Translate - Word</item>
+    </string-array>
+
+    <string name="not_all_fields_are_filled">Not all fields are filled</string>
+    <string name="the_word_is_already_there">The word is already there</string>
+    <string name="no_subj_cant_del">This theme cannot be removed</string>
+    <string name="no_words">No words</string>
+    <string name="mode">Mode</string>
+    <string name="textview">TextView</string>
+    <string name="next_word">Next word</string>
+    <string name="show_translate">Show translate</string>
+    <string name="edit_word">Edit word</string>
+    <string name="todo">TODO</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="dialog_themeDel_mess">Save these words in "No subject"?</string>
+    <string name="dialog_themeDel_title">Chose your pick</string>
+    <string name="right_translate">Right: </string>
+    <string name="wrong_translate">Wrong: </string>
+    <string name="right_in_succ">Right in succession: </string>
+    <string name="right">Right</string>
+    <string name="wrong">Wrong</string>
+    <string name="title_maxAmountInSucc">Amount of correct translations</string>
+    <string name="title_lang">Language</string>
+    <string name="summary_maxAmountInSucc">in succession to increase the degree of learning</string>
+    <string name="settings">Settings</string>
+    <string name="r">R: </string>
+    <string name="w">W: </string>
+    <string name="in_row">In row: </string>
+    <string name ="text_dialog_message">Set max amount right translates in succession</string>
+
+    <string-array name="entries_lang">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+
+    <string-array name="entryValues_lang">
+        <item>en</item>
+        <item>ru</item>
+    </string-array>
+    <string name="title_isActive">Activate auto increase</string>
+    <string name="summary_isActive">the degree of learning when reaching the selected amount of tranlates in succession</string>
+    <string name="summary_lang">application restart required</string>
+    <string name="delete_word">Delete word</string>
+    <string name="delete">Delete</string>
+    <string name="dialog_del_theme">Delete all the words from this theme or save them in \"No subject\"?</string>
+    <string name="save_words">Save words</string>
+    <string name="save">Save</string>
+    <string name="deleted">Deleted</string>
+    <string name="saved">Saved</string>
+
+</resources>

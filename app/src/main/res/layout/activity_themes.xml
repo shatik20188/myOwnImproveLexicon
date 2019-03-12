@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/themes_MainLL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     android:orientation="vertical"
     tools:context=".ThemesActivity">
 
@@ -30,11 +30,12 @@
         android:layout_weight="0"
         android:ems="10"
         android:hint="@string/theme"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/themes_NewThemeLL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:importantForAutofill="no" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <LinearLayout
         android:id="@+id/themes_NewThemeLL"
@@ -51,19 +52,11 @@
 
         <Button
             android:id="@+id/themes_AddThemes"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/add_theme"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-        <Button
-            android:id="@+id/themes_Back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/back"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:text="@string/add_theme" />
 
     </LinearLayout>
 

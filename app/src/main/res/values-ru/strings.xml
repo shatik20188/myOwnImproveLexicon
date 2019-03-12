@@ -80,13 +80,13 @@
         <item>en</item>
         <item>ru</item>
     </string-array>
-    <string name="title_isActive">Активировать автоматическое повышение</string>
     <string name="summary_isActive">степени изучения слова при достижении выбраного кол-ва переводов подряд</string>
-    <string name="summary_lang">application restart required</string>
+    <string name="title_isActive">Активировать автоматическое повышение</string>
+    <string name="summary_lang">требуется перезапуск приложения</string>
     <string name="delete_word">Удалить слово</string>
     <string name="delete">Удалить</string>
-    <string name="save_words">Сохранить слова</string>
     <string name="dialog_del_theme">Удалить все слова из этой темы или перенести их в \"No subject\"?</string>
+    <string name="save_words">Сохранить слова</string>
     <string name="save">Сохранить</string>
     <string name="deleted">Удалено</string>
     <string name="saved">Сохранено</string>

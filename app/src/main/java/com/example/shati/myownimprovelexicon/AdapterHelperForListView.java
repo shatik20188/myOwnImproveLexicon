@@ -38,8 +38,10 @@ public class AdapterHelperForListView {
         String[] groupFrom = { DBHelper.DEGREE_COL_NAME };
         int[] groupTo = { R.id.groupLV_Degree };
 
-        String[] childFrom = { DBHelper.WORDS_COL_WORD, DBHelper.WORDS_COL_TRANSLATE, DBHelper.THEMES_COL_NAME };
-        int[] childTo = { R.id.itemLV_Word, R.id.itemLV_Translate, R.id.itemLV_Theme };
+        String[] childFrom = { DBHelper.WORDS_COL_WORD, DBHelper.WORDS_COL_TRANSLATE, DBHelper.THEMES_COL_NAME,
+                DBHelper.WORDS_COL_AMOUNT_RIGHT, DBHelper.WORDS_COL_AMOUNT_WRONG, DBHelper.WORDS_COL_RIGHT_IN_SUCCESSION};
+        int[] childTo = { R.id.itemLV_Word, R.id.itemLV_Translate, R.id.itemLV_Theme,
+                R.id.itemLV_RightTr, R.id.itemLV_WrongTr, R.id.itemLV_InSuccTr };
 
         adapter = new AdapterForMainListView(ctx, cursor, R.layout.listview_group, groupFrom,
                 groupTo, R.layout.listview_item, childFrom, childTo);

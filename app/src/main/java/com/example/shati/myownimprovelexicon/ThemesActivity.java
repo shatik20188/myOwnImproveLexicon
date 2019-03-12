@@ -3,6 +3,7 @@ package com.example.shati.myownimprovelexicon;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.ContextMenu;
@@ -16,15 +17,16 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-public class ThemesActivity extends AppCompatActivity implements View.OnClickListener {
+public class ThemesActivity extends AppCompatActivity implements View.OnClickListener, DialogThemeDelFragment.NotifyChangedLW {
 
     private static final int CM_DELETE_ID = 1;
 
     EditText themeName;
-    Button addTheme, back;
+    Button addTheme;
     ListView themesListView;
     SimpleCursorAdapter adapter;
     DBHelper dbHelper;
+    DialogFragment dialogDelTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,6 @@ public class ThemesActivity extends AppCompatActivity implements View.OnClickLis
 
         addTheme = findViewById(R.id.themes_AddThemes);
         addTheme.setOnClickListener(this);
-        back = findViewById(R.id.themes_Back);
-        back.setOnClickListener(this);
 
         dbHelper = new DBHelper(this);
         dbHelper.open();
@@ -81,15 +81,13 @@ public class ThemesActivity extends AppCompatActivity implements View.OnClickLis
                     themeName.setText("");
                 }
             }
-        } else if (view.getId() == R.id.themes_Back) {
-            finish();
         }
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, CM_DELETE_ID, Menu.NONE, "Delete theme");
+        menu.add(Menu.NONE, CM_DELETE_ID, Menu.NONE, R.string.delete);
     }
 
     @Override
@@ -102,21 +100,32 @@ public class ThemesActivity extends AppCompatActivity implements View.OnClickLis
             if (theme.equals( getResources().getString(R.string.no_subject) ) ) {
                 Toast.makeText(this, R.string.no_subj_cant_del, Toast.LENGTH_SHORT).show();
             } else {
-                dbHelper.delThemeByTheme(theme);
 
-                adapter.notifyDataSetChanged();
+                Bundle bundle = new Bundle();
+                bundle.putString("theme", theme);
 
-                Cursor cursor = dbHelper.getThemesData();
-                String[] itemsFrom = {DBHelper.THEMES_COL_NAME};
-                int[] itemsTo = {android.R.id.text1};
+                dialogDelTheme = new DialogThemeDelFragment();
+                dialogDelTheme.setArguments(bundle);
+                dialogDelTheme.show(getSupportFragmentManager(), "dialogFragment");
 
-                themesListView = findViewById(R.id.themes_ListView);
-                adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
-                        itemsFrom, itemsTo, 0);
-                themesListView.setAdapter(adapter);
             }
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void notifyChanged() {
+
+        adapter.notifyDataSetChanged();
+
+        Cursor cursor = dbHelper.getThemesData();
+        String[] itemsFrom = {DBHelper.THEMES_COL_NAME};
+        int[] itemsTo = {android.R.id.text1};
+
+        themesListView = findViewById(R.id.themes_ListView);
+        adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
+                itemsFrom, itemsTo, 0);
+        themesListView.setAdapter(adapter);
     }
 
     @Override

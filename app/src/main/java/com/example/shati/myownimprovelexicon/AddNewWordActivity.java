@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class AddNewWordActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnBack, btnAddWord;
+    Button btnAddWord;
     Spinner spinDegree, spinTheme;
     EditText editTextWord, editTextTranslate;
     DBHelper dbHelper;
@@ -25,8 +25,6 @@ public class AddNewWordActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_word);
 
-        btnBack = findViewById(R.id.addNW_Back);
-        btnBack.setOnClickListener(this);
         btnAddWord =  findViewById(R.id.addNW_addWord);
         btnAddWord.setOnClickListener(this);
 
@@ -63,10 +61,6 @@ public class AddNewWordActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.addNW_Back:
-                Log.d("logm","back");
-                finish();
-                break;
 
             case R.id.addNW_addWord:
                 Cursor cursor = dbHelper.getDegreeData();
@@ -108,6 +102,9 @@ public class AddNewWordActivity extends AppCompatActivity implements View.OnClic
                 contentValues.put(DBHelper.WORDS_COL_TRANSLATE, enteredTranslate);
                 contentValues.put(DBHelper.WORDS_COL_ID_DEGREE, degreeId);
                 contentValues.put(DBHelper.WORDS_COL_ID_THEME, themeId);
+                contentValues.put(DBHelper.WORDS_COL_AMOUNT_RIGHT, 0);
+                contentValues.put(DBHelper.WORDS_COL_AMOUNT_WRONG, 0);
+                contentValues.put(DBHelper.WORDS_COL_RIGHT_IN_SUCCESSION, 0);
 
                 dbHelper.getSQLiteDatabase().insert(DBHelper.WORDS_TABLE_NAME,
                         null, contentValues);
